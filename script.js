@@ -86,7 +86,7 @@ function launch() {
   launched = true;
   loaderEl.style.display = "none";
   document.getElementById("site").classList.add("show");
-  
+
   requestAnimationFrame(() =>
     requestAnimationFrame(() => {
       initNeuralNet();
@@ -113,12 +113,10 @@ function attachReveal() {
   document.querySelectorAll(".reveal").forEach((el) => revealObs.observe(el));
 }
 
-
 const navbar = document.getElementById("navbar");
 window.addEventListener("scroll", () =>
   navbar.classList.toggle("scrolled", window.scrollY > 50),
 );
-
 
 const navList = document.getElementById("nav-list");
 const navBurger = document.getElementById("nav-burger");
@@ -136,7 +134,7 @@ document.querySelectorAll('a[href^="#"]').forEach((a) => {
     const el = document.querySelector(a.getAttribute("href"));
     if (el) {
       e.preventDefault();
-      
+
       navBurger.classList.remove("open");
       navList.classList.remove("open");
       document.body.style.overflow = "";
@@ -152,7 +150,7 @@ function initNeuralNet() {
   const W = () => canvas.clientWidth || window.innerWidth;
   const H = () => canvas.clientHeight || window.innerHeight;
 
-  // responsive helpers 
+  // responsive helpers
   const isMobile = () => window.innerWidth < 768;
   const isTablet = () => window.innerWidth >= 768 && window.innerWidth < 1100;
   const camZ = () => (isMobile() ? 26 : isTablet() ? 22 : 18);
@@ -172,7 +170,7 @@ function initNeuralNet() {
   renderer.setSize(W(), H(), false);
   renderer.setClearColor(0x000000, 0);
 
-  // node layers 
+  // node layers
   const LAYERS = [5, 8, 10, 8, 4];
   const sphereGeo = new THREE.SphereGeometry(0.18, 16, 16);
   const nodeList = [];
@@ -209,7 +207,7 @@ function initNeuralNet() {
   }
   layoutNodes();
 
-  // connections 
+  // connections
   const connectionLines = [];
   layers.forEach((layer, li) => {
     if (li >= layers.length - 1) return;
@@ -240,7 +238,7 @@ function initNeuralNet() {
     });
   }
 
-  // background particles 
+  // background particles
   const particlePos = new Float32Array(220 * 3);
   for (let i = 0; i < 220 * 3; i++) particlePos[i] = (Math.random() - 0.5) * 44;
   const particleGeo = new THREE.BufferGeometry();
@@ -260,7 +258,7 @@ function initNeuralNet() {
     ),
   );
 
-  // forward pass detection 
+  // forward pass detection
   let firstPassDone = false;
   function onFirstPassComplete() {
     if (firstPassDone) return;
@@ -268,13 +266,13 @@ function initNeuralNet() {
     document.getElementById("resume-panel").classList.add("show");
   }
 
-  // resume open in new tab 
+  // resume open in new tab
   const resumeBtn = document.getElementById("resume-btn");
   resumeBtn.addEventListener("click", () => {
     window.open("Atri_Sukul_Resume.pdf", "_blank");
   });
 
-  // signal pool 
+  // signal pool
   const dotGeo = new THREE.SphereGeometry(0.1, 8, 8);
   const dotMat = new THREE.MeshBasicMaterial({
     color: 0xc47830,
@@ -308,7 +306,7 @@ function initNeuralNet() {
   }
   const pulseInterval = setInterval(spawnPulse, 150);
 
-  // mouse 
+  // mouse
   const pointer = { x: 0, y: 0 };
   function onMouseMove(e) {
     pointer.x = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -316,7 +314,7 @@ function initNeuralNet() {
   }
   window.addEventListener("mousemove", onMouseMove);
 
-  // rendering loop 
+  // rendering loop
   let time = 0;
   (function animate() {
     requestAnimationFrame(animate);
@@ -358,7 +356,7 @@ function initNeuralNet() {
     renderer.render(scene, camera);
   })();
 
-  // this is for resizing: update sizes + relayout nodes 
+  // this is for resizing: update sizes + relayout nodes
   let resizeTimer;
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
@@ -423,7 +421,7 @@ function initSkillGraph() {
     pulses = [],
     frameCount = 0;
 
-  // layout 
+  // layout
   function init() {
     const CW = canvas.offsetWidth;
     const CH = canvas.offsetHeight;
@@ -491,7 +489,7 @@ function initSkillGraph() {
     });
   }
 
-  // bezier helpers 
+  // bezier helpers
   function getCurve(conn) {
     const s = nodes[conn.si],
       c = groups[conn.ci];
@@ -535,7 +533,7 @@ function initSkillGraph() {
     ctx.stroke();
   }
 
-  // draw 
+  // draw
   function render() {
     const W = canvas.offsetWidth,
       H = canvas.offsetHeight;
@@ -647,7 +645,7 @@ function initSkillGraph() {
     });
   }
 
-  // signals 
+  // signals
   function spawnPulse() {
     if (drawProgress < 0.4 || edges.length === 0) return;
     const conn = edges[Math.floor(Math.random() * edges.length)];
@@ -655,7 +653,7 @@ function initSkillGraph() {
     if (pulses.length > 18) pulses.shift();
   }
 
-  // hover detection 
+  // hover detection
   canvas.addEventListener("mousemove", (e) => {
     const r = canvas.getBoundingClientRect();
     const px = e.clientX - r.left,
@@ -668,7 +666,7 @@ function initSkillGraph() {
   });
   canvas.addEventListener("mouseleave", () => (hovered = -1));
 
-  // init & loop 
+  // init & loop
   init();
   window.addEventListener("resize", init);
 
